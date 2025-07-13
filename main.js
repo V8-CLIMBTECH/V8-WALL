@@ -1,28 +1,10 @@
-
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRdqfvEN83Y-19bbH6z0RxK1W6dHrWZ7Q_IIXCYKJ9vXCTfA1rVo5bRSqBfjw0wC1w3z3Bp2wyFV6_o/pub?output=csv";
+// Firebase init (уже подключено в HTML)
+const db = firebase.firestore();
 let routes = [];
 
-async function loadCSV() {
-  const response = await fetch(CSV_URL);
-  const text = await response.text();
-  const lines = text.split(/\r?\n/).filter(Boolean);
-  const headers = lines[0].split(',');
-  routes = lines.slice(1).map(line => {
-    const data = line.split(',');
-    const row = {};
-    headers.forEach((h, i) => {
-      const normalized = h.trim().replace(/['\"“”]/g, '');
-      if (normalized.includes('Название трассы')) row.name = data[i]?.trim();
-      else if (normalized.includes('Сектор')) row.sector = data[i]?.trim();
-      else if (normalized.includes('Категория сложности')) row.difficulty = data[i]?.trim();
-      else if (normalized.includes('Автор')) row.author = data[i]?.trim();
-    });
-    if (data[0]) {
-      const [date] = data[0].split(' ');
-      row.date = date;
-    }
-    return row;
-  });
+async function loadRoutes() {
+  const snapshot = await db.collection("routes").get();
+  routes = snapshot.docs.map(doc => doc.data());
   populateFilters();
   displayRoutes();
 }
@@ -79,7 +61,7 @@ function displayRoutes() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  loadCSV();
+  loadRoutes();
   for (let i = 1; i <= 12; i++) {
     const sector = document.getElementById(`sector${i}`);
     if (sector) {
