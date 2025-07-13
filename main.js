@@ -74,6 +74,10 @@ function filterRoutes() {
   `).join('');
 }
 
+function displayRoutes() {
+  filterRoutes();
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   loadCSV();
   for (let i = 1; i <= 12; i++) {
