@@ -11,11 +11,11 @@ async function loadCSV() {
     const data = line.split(',');
     const row = {};
     headers.forEach((h, i) => {
-      const value = data[i]?.trim();
-      if (h.includes('Название')) row.name = value;
-      else if (h.includes('Сектор')) row.sector = value;
-      else if (h.includes('Сложность')) row.difficulty = value;
-      else if (h.includes('Автор')) row.author = value;
+      const normalized = h.trim().replace(/['\"“”]/g, '');
+      if (normalized.includes('Название трассы')) row.name = data[i]?.trim();
+      else if (normalized.includes('Сектор')) row.sector = data[i]?.trim();
+      else if (normalized.includes('Категория сложности')) row.difficulty = data[i]?.trim();
+      else if (normalized.includes('Автор')) row.author = data[i]?.trim();
     });
     if (data[0]) {
       const [date] = data[0].split(' ');
