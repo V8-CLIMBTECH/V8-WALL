@@ -30,6 +30,8 @@
     }
     polygon:hover, path:hover, rect:hover {
       fill-opacity: 0.5;
+      stroke-width: 3;
+      cursor: pointer;
     }
     #filters {
       margin-top: 20px;
@@ -74,10 +76,15 @@
       font-size: 0.9em;
       color: #555;
     }
+    rect {
+      transition: all 0.2s ease;
+    }
+    rect:hover {
+      fill-opacity: 0.35;
+    }
   </style>
 </head>
 <body>
-
   <h1>Схема скалодрома</h1>
 
   <div id="filters">
@@ -116,9 +123,5 @@
   </div>
 
   <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScG8xcsoP-nHdAf4Qqa2e3VxH8_UFBaYk3K9QsIjX7flg5nKw/viewform?embedded=true" allowfullscreen></iframe>
-
-  <script>
-    // Firebase и логика подключается отдельно
-  </script>
 </body>
 </html>
