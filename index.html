@@ -1,13 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Интерактивная схема скалодрома</title>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="main.js" defer></script>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Интерактивная схема скалодрома</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script defer="" src="main.js"></script>
+<style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -29,7 +30,12 @@
       max-width: 600px;
       background-color: #f9f9f9;
     }
-    polygon:hover, path:hover, rect:hover {
+    polygon:hover, path:hover, rect.active {
+  fill: rgba(0, 255, 0, 0.25) !important;
+  stroke: green !important;
+  stroke-width: 3 !important;
+}
+rect:hover {
       fill-opacity: 0.5;
       stroke-width: 3;
       cursor: pointer;
@@ -80,53 +86,51 @@
     rect {
       transition: all 0.2s ease;
     }
-    rect:hover {
+    rect.active {
+  fill: rgba(0, 255, 0, 0.25) !important;
+  stroke: green !important;
+  stroke-width: 3 !important;
+}
+rect:hover {
       fill-opacity: 0.35;
     }
   </style>
 </head>
 <body>
-  <h1>Схема скалодрома</h1>
-
-  <div id="filters">
-    <label for="sectorSelect">Сектор:</label>
-    <select id="sectorSelect" onchange="filterRoutes()">
-      <option value="all">Все</option>
-    </select>
-
-    <label for="difficultySelect">Сложность:</label>
-    <select id="difficultySelect" onchange="filterRoutes()">
-      <option value="all">Любая</option>
-    </select>
-
-    <label for="authorSelect">Автор:</label>
-    <select id="authorSelect" onchange="filterRoutes()">
-      <option value="all">Все</option>
-    </select>
-
-    <label for="dateSelect">Дата:</label>
-    <select id="dateSelect" onchange="filterRoutes()">
-      <option value="all">Все даты</option>
-    </select>
-  </div>
-
-  <svg width="800" height="800" viewBox="0 0 800 800">
-    <image xlink:href="map2-0.jpg" x="0" y="0" width="800" height="800" />
-    <rect id="sector1" x="90" y="40" width="160" height="70" fill="rgba(255,0,0,0.15)" stroke="red" stroke-width="2" />
-    <rect id="sector2" x="85" y="140" width="165" height="80" fill="rgba(255,0,0,0.15)" stroke="red" stroke-width="2" />
-    <rect id="sector3" x="75" y="250" width="175" height="110" fill="rgba(255,0,0,0.15)" stroke="red" stroke-width="2" />
-    <rect id="sector4" x="80" y="370" width="160" height="100" fill="rgba(255,0,0,0.15)" stroke="red" stroke-width="2" />
-    <rect id="sector5" x="70" y="490" width="160" height="80" fill="rgba(255,0,0,0.15)" stroke="red" stroke-width="2" />
-    <rect id="sector6" x="310" y="40" width="150" height="90" fill="rgba(255,0,0,0.15)" stroke="red" stroke-width="2" />
-    <rect id="sector7" x="330" y="150" width="130" height="100" fill="rgba(255,0,0,0.15)" stroke="red" stroke-width="2" />
-    <rect id="sector8" x="310" y="270" width="150" height="90" fill="rgba(255,0,0,0.15)" stroke="red" stroke-width="2" />
-    <rect id="sector9" x="290" y="390" width="170" height="100" fill="rgba(255,0,0,0.15)" stroke="red" stroke-width="2" />
-    <rect id="sector10" x="260" y="520" width="210" height="90" fill="rgba(255,0,0,0.15)" stroke="red" stroke-width="2" />
-  </svg>
-
-  <div id="routeDetails">
-    <p>Загрузка данных из базы Firebase...</p>
-  </div>
-
+<h1>Схема скалодрома</h1>
+<div id="filters">
+<label for="sectorSelect">Сектор:</label>
+<select id="sectorSelect" onchange="filterRoutes()">
+<option value="all">Все</option>
+</select>
+<label for="difficultySelect">Сложность:</label>
+<select id="difficultySelect" onchange="filterRoutes()">
+<option value="all">Любая</option>
+</select>
+<label for="authorSelect">Автор:</label>
+<select id="authorSelect" onchange="filterRoutes()">
+<option value="all">Все</option>
+</select>
+<label for="dateSelect">Дата:</label>
+<select id="dateSelect" onchange="filterRoutes()">
+<option value="all">Все даты</option>
+</select>
+</div>
+<svg height="800" viewbox="0 0 800 800" width="800">
+<image height="800" width="800" x="0" xlink:href="map2-0.jpg" y="0"/>
+<rect fill="rgba(255,0,0,0.15)" height="74" id="sector1" stroke="red" stroke-width="2" width="164" x="88" y="38"></rect>
+<rect fill="rgba(255,0,0,0.15)" height="84" id="sector2" stroke="red" stroke-width="2" width="169" x="83" y="138"></rect>
+<rect fill="rgba(255,0,0,0.15)" height="114" id="sector3" stroke="red" stroke-width="2" width="179" x="73" y="248"></rect>
+<rect fill="rgba(255,0,0,0.15)" height="104" id="sector4" stroke="red" stroke-width="2" width="164" x="78" y="368"></rect>
+<rect fill="rgba(255,0,0,0.15)" height="84" id="sector5" stroke="red" stroke-width="2" width="164" x="68" y="488"></rect>
+<rect fill="rgba(255,0,0,0.15)" height="94" id="sector6" stroke="red" stroke-width="2" width="154" x="308" y="38"></rect>
+<rect fill="rgba(255,0,0,0.15)" height="104" id="sector7" stroke="red" stroke-width="2" width="134" x="328" y="148"></rect>
+<rect fill="rgba(255,0,0,0.15)" height="94" id="sector8" stroke="red" stroke-width="2" width="154" x="308" y="268"></rect>
+<rect fill="rgba(255,0,0,0.15)" height="104" id="sector9" stroke="red" stroke-width="2" width="174" x="288" y="388"></rect>
+<rect fill="rgba(255,0,0,0.15)" height="94" id="sector10" stroke="red" stroke-width="2" width="214" x="258" y="518"></rect>
+</svg>
+<div id="routeDetails">
+<p>Загрузка данных из базы Firebase...</p>
+</div>
 </body>
 </html>

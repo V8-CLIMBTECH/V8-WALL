@@ -47,7 +47,7 @@ function filterRoutes() {
   const routeList = document.getElementById('routeDetails');
 
   const filtered = routes.filter(r =>
-    (sector === 'all' || r.sector === sector) &&
+    (sector === 'all' || normalize(r.sector) === normalize(sector)) &&
     (difficulty === 'all' || r.difficulty === difficulty) &&
     (author === 'all' || r.author === author) &&
     (date === 'all' || r.date === date)
@@ -70,6 +70,7 @@ function filterRoutes() {
 }
 
 function displayRoutes() {
+  highlightSector(sector);
   filterRoutes();
 }
 
@@ -81,8 +82,35 @@ window.addEventListener("DOMContentLoaded", () => {
       sector.style.cursor = 'pointer';
       sector.addEventListener('click', () => {
         document.getElementById('sectorSelect').value = `Сектор ${i}`;
-        filterRoutes();
+        highlightSector(sector);
+  filterRoutes();
+        highlightSector(sector);
+  filterRoutes();
       });
     }
   }
 });
+
+
+function normalize(str) {
+  return (str || '').toLowerCase().replace(/ё/g, 'е').trim();
+}
+
+
+function highlightSector(sector) {
+  // Сброс подсветки
+  for (let i = 1; i <= 12; i++) {
+    const r = document.getElementById(`sector${i}`);
+    if (r) r.classList.remove('active');
+  }
+
+  // Подсветка нового
+  if (sector !== 'all') {
+    const match = sector.match(/Сектор\s*(\d+)/i);
+    if (match) {
+      const activeId = `sector${match[1]}`;
+      const r = document.getElementById(activeId);
+      if (r) r.classList.add('active');
+    }
+  }
+}
