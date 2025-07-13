@@ -123,5 +123,80 @@
   </div>
 
   <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScG8xcsoP-nHdAf4Qqa2e3VxH8_UFBaYk3K9QsIjX7flg5nKw/viewform?embedded=true" allowfullscreen></iframe>
+
+  <script>
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRdqfvEN83Y-19bbH6z0RxK1W6dHrWZ7Q_IIXCYKJ9vXCTfA1rVo5bRSqBfjw0wC1w3z3Bp2wyFV6_o/pub?output=csv';
+
+    let routes = [];
+    const routeDetails = document.getElementById('routeDetails');
+    const sectorSelect = document.getElementById('sectorSelect');
+    const difficultySelect = document.getElementById('difficultySelect');
+    const authorSelect = document.getElementById('authorSelect');
+
+    async function loadCSV() {
+      const response = await fetch(CSV_URL);
+      const text = await response.text();
+      const lines = text.split('
+').filter(Boolean);
+      const headers = lines[0].split(',');
+      routes = lines.slice(1).map(line => {
+        const data = line.split(',');
+        return Object.fromEntries(headers.map((h, i) => [h.trim(), data[i]?.trim()]));
+      });
+      populateFilters();
+      displayRoutes();
+    }
+
+    function populateFilters() {
+      const sectors = new Set();
+      const difficulties = new Set();
+      const authors = new Set();
+      routes.forEach(r => {
+        if (r.sector) sectors.add(r.sector);
+        if (r.difficulty) difficulties.add(r.difficulty);
+        if (r.author) authors.add(r.author);
+      });
+      sectors.forEach(s => sectorSelect.innerHTML += `<option value="${s}">${s}</option>`);
+      difficulties.forEach(d => difficultySelect.innerHTML += `<option value="${d}">${d}</option>`);
+      authors.forEach(a => authorSelect.innerHTML += `<option value="${a}">${a}</option>`);
+    }
+
+    function filterRoutes() {
+      const sector = sectorSelect.value;
+      const difficulty = difficultySelect.value;
+      const author = authorSelect.value;
+      const filtered = routes.filter(r =>
+        (sector === 'all' || r.sector === sector) &&
+        (difficulty === 'all' || r.difficulty === difficulty) &&
+        (author === 'all' || r.author === author)
+      );
+      displayRoutes(filtered);
+    }
+
+    function displayRoutes(data = routes) {
+      routeDetails.innerHTML = data.map(r => `
+        <div class="route">
+          <h3>${r.name}</h3>
+          <p><strong>Сектор:</strong> ${r.sector}</p>
+          <p><strong>Сложность:</strong> ${r.difficulty}</p>
+          <p><strong>Автор:</strong> ${r.author}</p>
+        </div>
+      `).join('') || '<p>Нет маршрутов по выбранным фильтрам.</p>';
+    }
+
+    loadCSV();
+
+    // Добавляем обработчики клика по секторам SVG
+    for (let i = 1; i <= 10; i++) {
+      const sector = document.getElementById(`sector${i}`);
+      if (sector) {
+        sector.style.cursor = 'pointer';
+        sector.addEventListener('click', () => {
+          sectorSelect.value = `sector${i}`;
+          filterRoutes();
+        });
+      }
+    }
+  </script>
 </body>
 </html>
