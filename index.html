@@ -146,8 +146,9 @@
     async function loadCSV() {
       const response = await fetch(CSV_URL);
       const text = await response.text();
-      const lines = text.split('
-').filter(Boolean);
+      const lines = text.split(/
+?
+/).filter(Boolean);
       const headers = lines[0].split(',');
       routes = lines.slice(1).map(line => {
         const data = line.split(',');
@@ -159,10 +160,15 @@
           else if (h.includes('Сложность')) row.difficulty = value;
           else if (h.includes('Автор')) row.author = value;
         });
-        if (headers[0] && data[0]) {
+        if (data[0]) {
           const [date] = data[0].split(' ');
           row.date = date;
         }
+        return row;
+      });
+      populateFilters();
+      displayRoutes();
+    }
         return row;
       });
       populateFilters();
