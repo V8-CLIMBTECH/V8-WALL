@@ -1,4 +1,17 @@
-// Firebase init (уже подключено в HTML)
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyC_moKKS5pRSaB9pCpFeixjXVF_NgMXQhI",
+  authDomain: "v8-tech.firebaseapp.com",
+  projectId: "v8-tech",
+  storageBucket: "v8-tech.firebasestorage.app",
+  messagingSenderId: "273402579949",
+  appId: "1:273402579949:web:1f8564f44158bde60ef5e4",
+  measurementId: "G-Z3ZL3VRRRQ"
+};
+
+// Инициализация Firebase
+firebase.initializeApp(firebaseConfig);
+
 const db = firebase.firestore();
 let routes = [];
 
